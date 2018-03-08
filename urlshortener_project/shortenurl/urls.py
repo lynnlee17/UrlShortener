@@ -13,13 +13,16 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url, include
-from django.contrib import admin
+from django.conf.urls import url
+from shortenurl import views
 
+app_name = 'shortenurl'
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    #leads to admin panel
-    url(r'', include('shortenurl.urls')),
-    #anything else will lead back to home/ and follow urls from shortenurl urls
+    url(r'^$', views.index, name='home'),
+    #leads to main homepage
+    url(r'^(?P<short_url>\w{0,200})$', views.redirect_link, name='redirectoriginal'),
+    #append the short url and it will redirect to the original link
+    url(r'^shorten/$', views.shorten_url, name='shortenurl'),
+    #create short url from the original and return it
 ]

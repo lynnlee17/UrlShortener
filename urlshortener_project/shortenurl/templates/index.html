@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>URL shortener</title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<h1>URL shortener project</h1>
+
+
+
+<script type="text/javascript">
+   $(function() {
+       $('#submitButton').click(function() {
+           $.ajax({
+               type: "POST",
+               url: "/shorten/",
+               data: {
+                   'url' : $('#url').val(),
+                   'csrfmiddlewaretoken' : $("input[name=csrfmiddlewaretoken]").val()
+               },
+               success: returnSuccess,
+               dataType: 'json'
+           });
+       });
+   });
+
+   function returnSuccess(data) {
+       if(data.url) {
+           $('#url-result').text(data.url);
+           $('#url').val("");
+       } else {
+           $('#url-result').text("Do not submit blank.");
+       }
+   }
+</script>
+
+<div class="panel-footer"><span id="url-result">Enter the URL</span></div>
+<input type="text" name="url" id="url" class="form-control input-sm" placeholder="http://www.facebook.com" />
+{% csrf_token %}
+<button id="submitButton" class="btn btn-primary">Submit</button></p>
+
+</body>
+</html>
